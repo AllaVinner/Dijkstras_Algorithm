@@ -4,7 +4,23 @@
 
 int INFO = 0;
 int DEBUG = 1;
-int LOGLEVEL = DEBUG;
+int LOGLEVEL = INFO;
+
+template <typename T>
+class Matrix;
+
+template <typename T>
+std::ostream& operator<<(std::ostream& ostr, const Matrix<T>& matrix)
+{
+    for(int r=0; r < matrix.get_num_rows(); r ++)
+    {
+        for(int c=0; c < matrix.get_num_cols(); c ++)
+            ostr << ' ' << matrix.get(r, c);
+        ostr << std::endl;
+    }
+    return ostr;
+}
+
 
 template <typename T>
 class Matrix
@@ -21,6 +37,7 @@ class Matrix
         T get(int m, int n) const;
         void set(int r, int c, T value);
         T* get_vector(int c) {return &m_data[c*m_num_rows];};
+        friend std::ostream& operator<< <> (std::ostream& ostr, const Matrix<T>& matrix);
 };
 
 template <typename T>
@@ -37,17 +54,6 @@ Matrix<T>::Matrix(int num_rows, int num_cols):
     }
 }; 
 
-template <typename T>
-std::ostream& operator<<(std::ostream& ostr, const Matrix<T>& matrix)
-{
-    for(int r=0; r < matrix.get_num_rows(); r ++)
-    {
-        for(int c=0; c < matrix.get_num_cols(); c ++)
-            ostr << ' ' << matrix.get(r, c);
-        ostr << std::endl;
-    }
-    return ostr;
-}
 
 template <typename T>
 int Matrix<T>::get_num_rows() const
@@ -230,6 +236,7 @@ int main(void)
         std::cout << *(g.get_weights());
         std::cout << std::endl << "-----------------------" << std::endl;  
     }
+
     bool con = g.is_connected();
     std::cout << std::endl << "Is connected: " << con << std::endl;
     return 0;
